@@ -1,216 +1,293 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { gsap } from "gsap";
-
-const ACCENT = "#FF5303";
-const INK = "#0C0C0F";
 
 type Props = {
   onDone: () => void;
   minDurationMs?: number;
 };
 
-function clamp01(n: number) {
-  return Math.min(1, Math.max(0, n));
-}
+// Full-viewport black preloader
+const BG = "#000000";
 
-function lerp(a: number, b: number, t: number) {
-  return a + (b - a) * t;
-}
+// Colors
+const WHITE = "#FFFFFF";
+const ORANGE = "#F37321";
+const TRACK = "#2B2B2B";
 
-function makeWavePath({
-  width,
-  height,
-  t,
-  intensity,
-  lines = 2,
-  lineIndex = 0,
-}: {
-  width: number;
-  height: number;
-  t: number;
-  intensity: number;
-  lines?: number;
-  lineIndex?: number;
-}) {
-  const mid = height * (0.56 + (lineIndex - (lines - 1) / 2) * 0.14);
-  const ampBase = height * 0.11 * intensity;
-  const freq = 2.2 + lineIndex * 0.35;
-  const phase = t * (1.25 + lineIndex * 0.28);
+// Timing (as requested)
+const FADE_IN_MS = 400;
+const BAR_FILL_MS = 2000;
+const LOGO_FILL_MS = 1500;
+const HOLD_MS = 500;
+const FADE_OUT_MS = 450;
 
-  const points = 72;
-  const dx = width / (points - 1);
+// Clip-path values (CSS inset order: top right bottom left)
+const CLIP_HIDDEN = "inset(0 100% 0 0)";
+const CLIP_VISIBLE = "inset(0 0 0 0)";
 
-  let d = "";
-  for (let i = 0; i < points; i++) {
-    const x = i * dx;
-    const nx = i / (points - 1);
-    const envelope = Math.sin(Math.PI * nx);
-    const wobble = Math.sin((nx * Math.PI * 2) * freq + phase);
-    const micro = Math.sin((nx * Math.PI * 2) * (freq * 2.4) + phase * 1.85) * 0.35;
-    const y = mid + (wobble + micro) * ampBase * envelope;
-    d += i === 0 ? `M ${x.toFixed(2)} ${y.toFixed(2)}` : ` L ${x.toFixed(2)} ${y.toFixed(2)}`;
+// Provided logo image (copied to `public/preloader-logo.png`)
+const LOGO_SRC = "/preloader-logo.png";
+
+function makeLuminanceMaskDataUrl(imageEl: HTMLImageElement): string {
+  const canvas = document.createElement("canvas");
+  const w = Math.max(1, imageEl.naturalWidth || imageEl.width);
+  const h = Math.max(1, imageEl.naturalHeight || imageEl.height);
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) return "";
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.drawImage(imageEl, 0, 0, w, h);
+
+  const img = ctx.getImageData(0, 0, w, h);
+  const data = img.data;
+
+  // Luminance-based alpha:
+  // - black pixels -> alpha 0 (transparent)
+  // - white pixels -> alpha 255 (opaque)
+  // - mid-tone pixels -> alpha interpolated
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    data[i] = 255;
+    data[i + 1] = 255;
+    data[i + 2] = 255;
+    data[i + 3] = Math.max(0, Math.min(255, Math.round(lum)));
   }
-  return d;
+
+  ctx.putImageData(img, 0, 0);
+  return canvas.toDataURL("image/png");
 }
 
-export function LoadingPage({ onDone, minDurationMs = 1200 }: Props) {
+function LogoMask({ color, maskUrl }: { color: string; maskUrl: string }) {
+  const mask = `url("${maskUrl}")`;
+  return (
+    <div
+      className="h-full w-full"
+      style={
+        {
+          backgroundColor: color,
+          maskImage: mask,
+          maskRepeat: "no-repeat",
+          maskPosition: "center",
+          maskSize: "contain",
+          WebkitMaskImage: mask,
+          WebkitMaskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          WebkitMaskSize: "contain",
+        } as any
+      }
+    />
+  );
+}
+
+export function LoadingPage({ onDone, minDurationMs = 0 }: Props) {
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const progressRef = useRef<HTMLDivElement | null>(null);
+  const [maskUrl, setMaskUrl] = useState<string>("");
+  const logoWrapRef = useRef<HTMLDivElement | null>(null);
+  const logoInnerRef = useRef<HTMLDivElement | null>(null);
+  const whiteLogoRef = useRef<HTMLDivElement | null>(null);
+  const orangeOverlayRef = useRef<HTMLDivElement | null>(null);
+  const barTrackRef = useRef<HTMLDivElement | null>(null);
+  const barFillRef = useRef<HTMLDivElement | null>(null);
 
-  const waveARef = useRef<SVGPathElement | null>(null);
-  const waveBRef = useRef<SVGPathElement | null>(null);
-  const [hint, setHint] = useState<"idle" | "boost">("idle");
-
-  const dims = useMemo(() => ({ w: 980, h: 260 }), []);
+  const doneRef = useRef(false);
 
   useEffect(() => {
-    const el = rootRef.current;
-    if (!el) return;
+    let cancelled = false;
+
+    const img = new Image();
+    img.decoding = "async";
+    img.src = LOGO_SRC;
+    img.onload = () => {
+      if (cancelled) return;
+      const url = makeLuminanceMaskDataUrl(img);
+      if (cancelled) return;
+      setMaskUrl(url);
+    };
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const canRenderLogo = useMemo(() => Boolean(maskUrl), [maskUrl]);
+
+  useEffect(() => {
+    const rootEl = rootRef.current;
+    const whiteEl = whiteLogoRef.current;
+    const overlayEl = orangeOverlayRef.current;
+    const trackEl = barTrackRef.current;
+    const fillEl = barFillRef.current;
+    const logoWrapEl = logoWrapRef.current;
+    const logoInnerEl = logoInnerRef.current;
+
+    if (!rootEl || !whiteEl || !overlayEl || !trackEl || !fillEl || !logoWrapEl || !logoInnerEl) return;
 
     const prevOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
 
-    let spaceDown = false;
-    let done = false;
-    const startedAt = performance.now();
+    // Step durations
+    const baseTotal = FADE_IN_MS + BAR_FILL_MS + LOGO_FILL_MS + HOLD_MS + FADE_OUT_MS;
+    const extraWait = Math.max(0, minDurationMs - baseTotal);
 
-    let intensity = 0.55;
-    let t = 0;
+    const timers: number[] = [];
+    let barTransitionDone = false;
 
-    const tick = () => {
-      const dt = gsap.ticker.deltaRatio(60) / 60;
-      const targetIntensity = spaceDown ? 1 : 0.55;
-      intensity = lerp(intensity, targetIntensity, 1 - Math.pow(0.001, dt));
-      t += dt * (spaceDown ? 2.6 : 1.15);
-
-      const a = waveARef.current;
-      const b = waveBRef.current;
-      if (a) {
-        a.setAttribute("d", makeWavePath({ width: dims.w, height: dims.h, t, intensity, lines: 2, lineIndex: 0 }));
-      }
-      if (b) {
-        b.setAttribute(
-          "d",
-          makeWavePath({ width: dims.w, height: dims.h, t: t * 1.05 + 0.6, intensity, lines: 2, lineIndex: 1 }),
-        );
-      }
-
-      const p = clamp01(((performance.now() - startedAt) / minDurationMs) * (spaceDown ? 1.55 : 1));
-      if (progressRef.current) progressRef.current.style.transform = `scaleX(${p})`;
-
-      if (!done && p >= 1) {
-        done = true;
-        gsap.to(el, {
-          opacity: 0,
-          duration: 0.25,
-          ease: "power2.out",
-          onComplete: onDone,
-        });
-      }
+    const cleanup = () => {
+      document.documentElement.style.overflow = prevOverflow;
+      for (const t of timers) window.clearTimeout(t);
+      doneRef.current = true;
     };
 
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        e.preventDefault();
-        if (!spaceDown) setHint("boost");
-        spaceDown = true;
-      }
+    // Initial styles (hidden overlay, empty bar, fade-in elements)
+    rootEl.style.opacity = "1";
+    rootEl.style.transition = "none";
+
+    whiteEl.style.opacity = "0";
+    whiteEl.style.transition = `opacity ${FADE_IN_MS}ms ease`;
+
+    trackEl.style.opacity = "0";
+    trackEl.style.transition = `opacity ${FADE_IN_MS}ms ease`;
+
+    overlayEl.style.clipPath = CLIP_HIDDEN;
+    overlayEl.style.transition = "none";
+
+    fillEl.style.width = "0%";
+    fillEl.style.transition = "none";
+
+    // Size logo to be exactly 60% of the loading bar width.
+    const setLogoSize = () => {
+      const barW = trackEl.getBoundingClientRect().width;
+      const size = Math.round(barW * 0.6);
+      logoInnerEl.style.width = `${size}px`;
+      logoInnerEl.style.height = `${size}px`;
     };
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        e.preventDefault();
-        spaceDown = false;
-        setHint("idle");
-      }
+    setLogoSize();
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => setLogoSize());
+      ro.observe(trackEl);
+    } else {
+      window.addEventListener("resize", setLogoSize);
+    }
+
+    // Trigger Step 0: fade in white logo + empty bar
+    timers.push(
+      window.setTimeout(() => {
+        whiteEl.style.opacity = "1";
+        trackEl.style.opacity = "1";
+      }, 0),
+    );
+
+    // Step 1: bar fill (0% -> 100%)
+    const startLogoRevealAndFadeOut = () => {
+      if (barTransitionDone) return;
+      barTransitionDone = true;
+
+      // Step 2: logo overlay reveals exactly when bar is full.
+      overlayEl.style.transition = `clip-path ${LOGO_FILL_MS}ms linear`;
+      overlayEl.style.clipPath = CLIP_VISIBLE;
+
+      // Step 3: hold 0.5s after logo is fully orange, then fade out wrapper.
+      timers.push(
+        window.setTimeout(() => {
+          rootEl.style.transition = `opacity ${FADE_OUT_MS}ms ease`;
+          rootEl.style.opacity = "0";
+
+          timers.push(
+            window.setTimeout(() => {
+              if (doneRef.current) return;
+              doneRef.current = true;
+              onDone();
+            }, FADE_OUT_MS),
+          );
+        }, LOGO_FILL_MS + HOLD_MS + extraWait),
+      );
     };
 
-    window.addEventListener("keydown", onKeyDown, { passive: false });
-    window.addEventListener("keyup", onKeyUp, { passive: false });
+    const onBarTransitionEnd = (e: TransitionEvent) => {
+      if (e.propertyName !== "width") return;
+      startLogoRevealAndFadeOut();
+    };
 
-    gsap.ticker.add(tick);
-    gsap.set(el, { opacity: 1 });
+    fillEl.addEventListener("transitionend", onBarTransitionEnd);
+
+    timers.push(
+      window.setTimeout(() => {
+        fillEl.style.transition = `width ${BAR_FILL_MS}ms linear`;
+        // Force reflow to ensure the transition is picked up reliably.
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        fillEl.offsetWidth;
+        fillEl.style.width = "100%";
+      }, FADE_IN_MS),
+    );
+
+    // Fallback: if transitionend doesn't fire for any reason, start Step 2 on time.
+    timers.push(
+      window.setTimeout(() => {
+        startLogoRevealAndFadeOut();
+      }, FADE_IN_MS + BAR_FILL_MS),
+    );
 
     return () => {
-      gsap.ticker.remove(tick);
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
-      document.documentElement.style.overflow = prevOverflow;
+      cleanup();
+      if (ro) ro.disconnect();
+      else window.removeEventListener("resize", setLogoSize);
+      fillEl.removeEventListener("transitionend", onBarTransitionEnd);
     };
-  }, [dims.h, dims.w, minDurationMs, onDone]);
+  }, [onDone, minDurationMs]);
 
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-[#0C0C0F] opacity-0"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black"
       role="status"
       aria-live="polite"
+      aria-busy="true"
     >
-      <div className="mx-auto w-full max-w-4xl px-6">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 md:p-10">
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/55">Loading</p>
-              <p className="mt-3 text-2xl font-semibold tracking-tight text-white md:text-3xl">Heating up</p>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">
-                Hold <span className="font-semibold text-white">Space</span> to speed up.
-              </p>
+      <div className="flex flex-col items-center justify-center px-6">
+        <div
+          ref={logoWrapRef}
+          className="relative w-[260px] max-w-[70vw]"
+        >
+          {/* LogoInner is sized (60% of bar width) by JS, and stays centered. */}
+          <div
+            ref={logoInnerRef}
+            className="relative mx-auto"
+            style={{ width: "156px", height: "156px" }}
+          >
+            <div
+              ref={whiteLogoRef}
+              className="absolute inset-0 flex items-center justify-center"
+            style={{ opacity: canRenderLogo ? 0 : 0 }}
+            >
+            {canRenderLogo ? <LogoMask color={WHITE} maskUrl={maskUrl} /> : null}
             </div>
-            <div className="min-w-[220px]">
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/20 p-3">
-                <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
-                  <div
-                    ref={progressRef}
-                    className="h-full origin-left rounded-full"
-                    style={{
-                      transform: "scaleX(0)",
-                      background: ACCENT,
-                      boxShadow: "0 0 22px rgba(255,83,3,0.45)",
-                    }}
-                  />
-                </div>
-                <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55">
-                  {hint === "boost" ? "Boosting" : "Idle"}
-                </p>
-              </div>
+            <div
+              ref={orangeOverlayRef}
+              className="absolute inset-0 flex items-center justify-center"
+              style={{ clipPath: CLIP_HIDDEN }}
+            >
+            {canRenderLogo ? <LogoMask color={ORANGE} maskUrl={maskUrl} /> : null}
             </div>
           </div>
 
-          <div className="mt-10 overflow-hidden rounded-3xl border border-white/10 bg-black/20">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none h-[260px] w-full"
-              style={{
-                background: `radial-gradient(900px 280px at 50% 20%, rgba(255,83,3,0.14), transparent 60%)`,
-              }}
-            >
-              <svg className="h-full w-full" viewBox={`0 0 ${dims.w} ${dims.h}`} preserveAspectRatio="none">
-                <rect x="0" y="0" width={dims.w} height={dims.h} fill={INK} />
-                <path
-                  ref={waveARef}
-                  d={makeWavePath({ width: dims.w, height: dims.h, t: 0, intensity: 0.55, lines: 2, lineIndex: 0 })}
-                  fill="none"
-                  stroke="rgba(255,255,255,0.30)"
-                  strokeWidth="2"
-                />
-                <path
-                  ref={waveBRef}
-                  d={makeWavePath({ width: dims.w, height: dims.h, t: 0.6, intensity: 0.55, lines: 2, lineIndex: 1 })}
-                  fill="none"
-                  stroke="rgba(255,83,3,0.80)"
-                  strokeWidth="2"
-                />
-              </svg>
-            </div>
+          {/* BarTrack is absolute under the visible part; negative margin pulls it up to overlap transparent logo padding. */}
+          <div
+            ref={barTrackRef}
+            className="absolute left-0 top-full mt-[-12px] h-[4px] w-full overflow-hidden rounded-full bg-[#2B2B2B]"
+            style={{ opacity: 0 }}
+          >
+            <div ref={barFillRef} className="h-full bg-[#F37321]" style={{ width: "0%" }} />
           </div>
         </div>
-
-        <p className="mt-6 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
-          Waveform loader • Space to boost
-        </p>
       </div>
     </div>
   );
 }
-

@@ -113,11 +113,6 @@ export default function Page() {
   useGsapSmoothScroll({ enabled: !isLoading, lerp: 0.115 });
 
   useEffect(() => {
-    const t = window.setTimeout(() => setIsLoading(false), 2800);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
