@@ -48,3 +48,8 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+.kittle-pet {
+  aspect-ratio: 192 / 208;
+  overflow: hidden;
+}

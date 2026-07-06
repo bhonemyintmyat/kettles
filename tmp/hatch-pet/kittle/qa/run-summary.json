@@ -1,0 +1,12 @@
+﻿{
+    "ok":  true,
+    "pet_name":  "Kittle",
+    "package_dir":  "C:\\Users\\Hua Fan\\.codex\\pets\\kittle",
+    "spritesheet":  "C:\\Users\\Hua Fan\\.codex\\pets\\kittle\\spritesheet.webp",
+    "source_run_dir":  "C:\\BVIWorkspace\\React\\kettles\\tmp\\hatch-pet\\kittle",
+    "validation":  "C:\\BVIWorkspace\\React\\kettles\\tmp\\hatch-pet\\kittle\\final\\validation.json",
+    "contact_sheet":  "C:\\BVIWorkspace\\React\\kettles\\tmp\\hatch-pet\\kittle\\qa\\contact-sheet.png",
+    "previews":  "C:\\BVIWorkspace\\React\\kettles\\tmp\\hatch-pet\\kittle\\qa\\previews",
+    "visual_qa":  "pass",
+    "qa_note":  "Kittle keeps a consistent premium flame-headed Kettles companion silhouette across all rows, with clean transparency and valid atlas dimensions."
+}

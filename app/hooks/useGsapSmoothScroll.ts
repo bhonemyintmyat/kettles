@@ -22,6 +22,19 @@ export function useGsapSmoothScroll({ enabled = true, lerp = 0.12 }: Options = {
     let rafLock = false;
     let wheelActive = false;
 
+    const syncFromWindow = () => {
+      target = window.scrollY;
+      current = window.scrollY;
+    };
+
+    // After loading overlays or overflow locks, layout/scrollHeight can settle one frame late.
+    syncFromWindow();
+    let raf0 = 0;
+    let raf1 = 0;
+    raf0 = requestAnimationFrame(() => {
+      raf1 = requestAnimationFrame(syncFromWindow);
+    });
+
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey) return; // allow browser zoom
       e.preventDefault();
@@ -59,6 +72,8 @@ export function useGsapSmoothScroll({ enabled = true, lerp = 0.12 }: Options = {
     gsap.ticker.add(tick);
 
     return () => {
+      cancelAnimationFrame(raf0);
+      cancelAnimationFrame(raf1);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scroll", onScroll);
       gsap.ticker.remove(tick);
