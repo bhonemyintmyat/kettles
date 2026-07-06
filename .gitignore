@@ -8,3 +8,6 @@ out/
 # environment variables (secrets)
 .env
 .env.local
+
+# local logo and asset source files
+LogoandAssets/
