@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { type PointerEvent, useEffect, useRef, useState } from "react";
+import { type PointerEvent, useCallback, useEffect, useRef, useState } from "react";
 
 export type KittleMode =
   | "static"
@@ -18,6 +18,7 @@ export type KittleMode =
 type Props = {
   className?: string;
   mode?: KittleMode;
+  animateOnView?: boolean;
 };
 
 const animatedSources: Record<Exclude<KittleMode, "static">, string> = {
@@ -32,9 +33,15 @@ const animatedSources: Record<Exclude<KittleMode, "static">, string> = {
   review: "/pets/kittle/kittle-review.webp",
 };
 
-export function KittlePet({ className = "", mode = "static" }: Props) {
+export function KittlePet({
+  className = "",
+  mode = "static",
+  animateOnView = true,
+}: Props) {
   const [isActive, setIsActive] = useState(false);
   const tapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const hasAutoPlayedRef = useRef(false);
   const rootClassName = ["kittle-pet relative touch-manipulation", className || "w-28"]
     .filter(Boolean)
     .join(" ");
@@ -47,7 +54,7 @@ export function KittlePet({ className = "", mode = "static" }: Props) {
     };
   }, []);
 
-  const triggerTapAnimation = () => {
+  const triggerTapAnimation = useCallback(() => {
     if (mode === "static") {
       return;
     }
@@ -61,7 +68,30 @@ export function KittlePet({ className = "", mode = "static" }: Props) {
     tapTimerRef.current = setTimeout(() => {
       setIsActive(false);
     }, 1800);
-  };
+  }, [mode]);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || mode === "static" || !animateOnView || hasAutoPlayedRef.current) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || hasAutoPlayedRef.current) {
+          return;
+        }
+
+        hasAutoPlayedRef.current = true;
+        triggerTapAnimation();
+        observer.unobserve(root);
+      },
+      { threshold: 0.45 },
+    );
+
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, [animateOnView, mode, triggerTapAnimation]);
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === "mouse") {
@@ -95,6 +125,7 @@ export function KittlePet({ className = "", mode = "static" }: Props) {
   if (mode !== "static") {
     return (
       <div
+        ref={rootRef}
         className={rootClassName}
         onPointerDown={handlePointerDown}
         onPointerEnter={handlePointerEnter}
@@ -109,20 +140,22 @@ export function KittlePet({ className = "", mode = "static" }: Props) {
           priority
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={animatedSources[mode]}
-          alt=""
-          width={192}
-          height={208}
-          aria-hidden="true"
-          className={animatedLayerClassName}
-        />
+        {isActive ? (
+          <img
+            src={animatedSources[mode]}
+            alt=""
+            width={192}
+            height={208}
+            aria-hidden="true"
+            className={animatedLayerClassName}
+          />
+        ) : null}
       </div>
     );
   }
 
   return (
-    <div className={rootClassName}>
+    <div ref={rootRef} className={rootClassName}>
       <Image
         src="/pets/kittle/kittle-static.webp"
         alt="Kittle mascot"

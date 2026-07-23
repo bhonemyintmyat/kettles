@@ -1403,8 +1403,10 @@ export default function Page() {
               <SectionLabel>{c.heroLabel}</SectionLabel>
               <h1
                 className={[
-                  "mt-7 max-w-4xl text-balance font-semibold leading-[1.08] tracking-[-0.04em] text-white",
-                  lang === "my" ? "text-2xl md:text-3xl" : "text-5xl md:text-7xl",
+                  "mt-7 max-w-4xl text-balance font-semibold tracking-[-0.04em] text-white",
+                  lang === "my"
+                    ? "text-[1.75rem] leading-[1.4] md:text-[2.15rem] md:leading-[1.35]"
+                    : "text-5xl leading-[1.08] md:text-7xl",
                 ].join(" ")}
               >
                 {c.heroTitle}
