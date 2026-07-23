@@ -110,6 +110,8 @@ const content = {
   en: {
     menu: [
       { id: "build", label: "Offer" },
+      { id: "packages", label: "Packages" },
+      { id: "focused-services", label: "Focused Services" },
       { id: "lab", label: "Who We Help" },
       { id: "contact", label: "Contact" },
     ],
@@ -335,6 +337,8 @@ const content = {
   my: {
     menu: [
       { id: "build", label: "Offer" },
+      { id: "packages", label: "Packages" },
+      { id: "focused-services", label: "Focused Services" },
       { id: "lab", label: "Who We Help" },
       { id: "contact", label: "Contact" },
     ],

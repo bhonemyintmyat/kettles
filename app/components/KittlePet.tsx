@@ -41,7 +41,7 @@ export function KittlePet({
   const [isActive, setIsActive] = useState(false);
   const tapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const hasAutoPlayedRef = useRef(false);
+  const isInViewRef = useRef(false);
   const rootClassName = ["kittle-pet relative touch-manipulation", className || "w-28"]
     .filter(Boolean)
     .join(" ");
@@ -72,21 +72,26 @@ export function KittlePet({
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root || mode === "static" || !animateOnView || hasAutoPlayedRef.current) {
+    if (!root || mode === "static" || !animateOnView) {
       return;
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || hasAutoPlayedRef.current) {
+        if (!entry.isIntersecting) {
+          isInViewRef.current = false;
           return;
         }
 
-        hasAutoPlayedRef.current = true;
-        triggerTapAnimation();
-        observer.unobserve(root);
+        if (!isInViewRef.current) {
+          isInViewRef.current = true;
+          triggerTapAnimation();
+        }
       },
-      { threshold: 0.45 },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -8% 0px",
+      },
     );
 
     observer.observe(root);
