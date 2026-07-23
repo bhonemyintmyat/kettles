@@ -89,7 +89,7 @@ export function MobileMenu({ open, items, onClose, onNavigate, social }: Props) 
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[55] hidden h-[100dvh] touch-pan-y overflow-x-hidden overflow-y-auto overscroll-contain bg-black/70 opacity-0 backdrop-blur-sm [-webkit-overflow-scrolling:touch]"
+      className="fixed inset-0 z-[55] hidden h-[100dvh] overflow-hidden bg-black/70 opacity-0 backdrop-blur-sm"
       aria-hidden={!open}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -97,15 +97,15 @@ export function MobileMenu({ open, items, onClose, onNavigate, social }: Props) 
     >
       <div
         ref={panelRef}
-        className="relative min-h-[100dvh] w-full bg-[#030303] text-white"
+        className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-[#030303] text-white"
         role="dialog"
         aria-modal="true"
         aria-label="Mobile menu"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,83,3,0.14),transparent_34%),linear-gradient(180deg,#090909_0%,#030303_52%,#000_100%)]" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.025] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:72px_72px]" />
-        <div className="mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))]">
-          <div className="relative flex items-center justify-between gap-4">
+        <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))]">
+          <div className="relative flex shrink-0 items-center justify-between gap-4">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/42">Menu</p>
             <button
               type="button"
@@ -117,21 +117,26 @@ export function MobileMenu({ open, items, onClose, onNavigate, social }: Props) 
             </button>
           </div>
 
-          <div ref={listRef} className="relative mt-8 grid gap-4">
+          <div
+            ref={listRef}
+            className="relative mt-5 min-h-0 flex-1 touch-pan-y overflow-x-hidden overflow-y-scroll overscroll-contain pb-6 [-webkit-overflow-scrolling:touch]"
+          >
+            <div className="grid gap-2">
             {items.map((it) => (
               <button
                 key={it.id}
                 data-menu-item
                 type="button"
                 onClick={() => onNavigate(it.id)}
-                className="w-full border-b border-white/10 py-5 text-left text-2xl font-semibold tracking-tight text-white transition-colors hover:text-[#FF5303]"
+                className="w-full border-b border-white/10 py-4 text-left text-2xl font-semibold tracking-tight text-white transition-colors hover:text-[#FF5303]"
               >
                 {it.label}
               </button>
             ))}
+            </div>
           </div>
 
-          <div className="relative mt-auto pt-10">
+          <div className="relative shrink-0 border-t border-white/10 pt-4">
             <div className="flex items-center gap-3">
               {social.map((s) => (
                 <a
