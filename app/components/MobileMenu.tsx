@@ -53,10 +53,15 @@ export function MobileMenu({ open, items, onClose, onNavigate, social }: Props) 
   }, [tl, items.length]);
 
   useEffect(() => {
-    const prevOverflow = document.documentElement.style.overflow;
-    if (open) document.documentElement.style.overflow = "hidden";
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyOverflow = document.body.style.overflow;
+    if (open) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    }
     return () => {
-      document.documentElement.style.overflow = prevOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = prevBodyOverflow;
     };
   }, [open]);
 
@@ -84,7 +89,7 @@ export function MobileMenu({ open, items, onClose, onNavigate, social }: Props) 
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[55] hidden bg-black/70 opacity-0 backdrop-blur-sm"
+      className="fixed inset-0 z-[55] hidden h-[100dvh] touch-pan-y overflow-x-hidden overflow-y-auto overscroll-contain bg-black/70 opacity-0 backdrop-blur-sm [-webkit-overflow-scrolling:touch]"
       aria-hidden={!open}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -92,14 +97,14 @@ export function MobileMenu({ open, items, onClose, onNavigate, social }: Props) 
     >
       <div
         ref={panelRef}
-        className="relative h-full w-full touch-pan-y overflow-x-hidden overflow-y-auto overscroll-contain bg-[#030303] text-white"
+        className="relative min-h-[100dvh] w-full bg-[#030303] text-white"
         role="dialog"
         aria-modal="true"
         aria-label="Mobile menu"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,83,3,0.14),transparent_34%),linear-gradient(180deg,#090909_0%,#030303_52%,#000_100%)]" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.025] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:72px_72px]" />
-        <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))]">
+        <div className="mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))]">
           <div className="relative flex items-center justify-between gap-4">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/42">Menu</p>
             <button

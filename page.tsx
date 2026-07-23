@@ -1264,7 +1264,7 @@ export default function Page() {
   const [lang, setLang] = useState<Lang>("en");
   const c = lang === "my" ? myContentResolved : content.en;
 
-  useGsapSmoothScroll({ enabled: !isLoading, lerp: 0.115 });
+  useGsapSmoothScroll({ enabled: !isLoading && !menuOpen, lerp: 0.115 });
 
   const menuItems: MenuItem[] = useMemo(
     () => content.en.menu,
