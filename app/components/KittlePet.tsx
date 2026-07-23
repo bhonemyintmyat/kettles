@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { type PointerEvent, useEffect, useRef, useState } from "react";
 
 export type KittleMode =
   | "static"
@@ -30,17 +33,79 @@ const animatedSources: Record<Exclude<KittleMode, "static">, string> = {
 };
 
 export function KittlePet({ className = "", mode = "static" }: Props) {
-  const rootClassName = ["kittle-pet group relative", className || "w-28"].filter(Boolean).join(" ");
+  const [isActive, setIsActive] = useState(false);
+  const tapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rootClassName = ["kittle-pet relative touch-manipulation", className || "w-28"]
+    .filter(Boolean)
+    .join(" ");
+
+  useEffect(() => {
+    return () => {
+      if (tapTimerRef.current) {
+        clearTimeout(tapTimerRef.current);
+      }
+    };
+  }, []);
+
+  const triggerTapAnimation = () => {
+    if (mode === "static") {
+      return;
+    }
+
+    setIsActive(true);
+
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current);
+    }
+
+    tapTimerRef.current = setTimeout(() => {
+      setIsActive(false);
+    }, 1800);
+  };
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") {
+      return;
+    }
+
+    triggerTapAnimation();
+  };
+
+  const handlePointerEnter = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") {
+      setIsActive(true);
+    }
+  };
+
+  const handlePointerLeave = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") {
+      setIsActive(false);
+    }
+  };
+
+  const staticLayerClassName = [
+    "h-full w-full object-contain transition-opacity duration-200",
+    isActive ? "opacity-0" : "opacity-100",
+  ].join(" ");
+  const animatedLayerClassName = [
+    "absolute inset-0 h-full w-full object-contain transition-opacity duration-200",
+    isActive ? "opacity-100" : "opacity-0",
+  ].join(" ");
 
   if (mode !== "static") {
     return (
-      <div className={rootClassName}>
+      <div
+        className={rootClassName}
+        onPointerDown={handlePointerDown}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+      >
         <Image
           src="/pets/kittle/kittle-static.webp"
           alt="Kittle mascot"
           width={192}
           height={208}
-          className="h-full w-full object-contain transition-opacity duration-200 group-hover:opacity-0"
+          className={staticLayerClassName}
           priority
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -50,7 +115,7 @@ export function KittlePet({ className = "", mode = "static" }: Props) {
           width={192}
           height={208}
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          className={animatedLayerClassName}
         />
       </div>
     );

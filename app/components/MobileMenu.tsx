@@ -135,6 +135,16 @@ export function MobileMenu({ open, items, onClose, onNavigate, social }: Props) 
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
+                  onClick={() => {
+                    const analyticsWindow = window as typeof window & {
+                      dataLayer?: Array<Record<string, unknown>>;
+                    };
+                    analyticsWindow.dataLayer = analyticsWindow.dataLayer ?? [];
+                    analyticsWindow.dataLayer.push({
+                      event: "inquiry_click",
+                      inquiry_method: s.label.toLowerCase(),
+                    });
+                  }}
                   className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-white/70 transition hover:border-[#FF5303]/40 hover:text-white"
                 >
                   {s.icon}

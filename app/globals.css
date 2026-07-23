@@ -53,3 +53,36 @@ body {
   aspect-ratio: 192 / 208;
   overflow: hidden;
 }
+
+.partner-marquee {
+  mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+}
+
+.partner-marquee-track {
+  animation: partner-marquee 26s linear infinite;
+}
+
+.partner-marquee:hover .partner-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes partner-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 0.375rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  .partner-marquee-track {
+    animation: none;
+  }
+}
