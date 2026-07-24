@@ -1419,9 +1419,16 @@ export default function Page() {
                 {c.heroCopy}
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-3 text-sm text-white/72">
+              <div
+                className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
+                aria-label="Kettles capabilities"
+              >
                 {c.heroChips.map((item) => (
-                  <span key={item} className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2">
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/45"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#FF5303]/70" aria-hidden="true" />
                     {item}
                   </span>
                 ))}
