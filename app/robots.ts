@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://kettles.io/sitemap.xml",
-    host: "https://kettles.io",
+    sitemap: "https://kettles.studio/sitemap.xml",
+    host: "https://kettles.studio",
   };
 }

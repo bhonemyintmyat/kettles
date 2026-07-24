@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import Script from "next/script";
 import "./globals.css";
 
-const siteUrl = "https://kettles.io";
+const siteUrl = "https://kettles.studio";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

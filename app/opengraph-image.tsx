@@ -66,7 +66,7 @@ export default function OpenGraphImage() {
           }}
         >
           <span>Online Presence Studio</span>
-          <span>kettles.io</span>
+          <span>kettles.studio</span>
         </div>
       </div>
     ),
