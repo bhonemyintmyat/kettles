@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { type PointerEvent, useCallback, useEffect, useRef, useState } from "react";
 
 export type KittleMode =
   | "static"
@@ -15,6 +18,7 @@ export type KittleMode =
 type Props = {
   className?: string;
   mode?: KittleMode;
+  animateOnView?: boolean;
 };
 
 const animatedSources: Record<Exclude<KittleMode, "static">, string> = {
@@ -29,35 +33,134 @@ const animatedSources: Record<Exclude<KittleMode, "static">, string> = {
   review: "/pets/kittle/kittle-review.webp",
 };
 
-export function KittlePet({ className = "", mode = "static" }: Props) {
-  const rootClassName = ["kittle-pet group relative", className || "w-28"].filter(Boolean).join(" ");
+export function KittlePet({
+  className = "",
+  mode = "static",
+  animateOnView = true,
+}: Props) {
+  const [isActive, setIsActive] = useState(false);
+  const tapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const isInViewRef = useRef(false);
+  const rootClassName = ["kittle-pet relative touch-manipulation", className || "w-28"]
+    .filter(Boolean)
+    .join(" ");
+
+  useEffect(() => {
+    return () => {
+      if (tapTimerRef.current) {
+        clearTimeout(tapTimerRef.current);
+      }
+    };
+  }, []);
+
+  const triggerTapAnimation = useCallback(() => {
+    if (mode === "static") {
+      return;
+    }
+
+    setIsActive(true);
+
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current);
+    }
+
+    tapTimerRef.current = setTimeout(() => {
+      setIsActive(false);
+    }, 1800);
+  }, [mode]);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || mode === "static" || !animateOnView) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          isInViewRef.current = false;
+          return;
+        }
+
+        if (!isInViewRef.current) {
+          isInViewRef.current = true;
+          triggerTapAnimation();
+        }
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -8% 0px",
+      },
+    );
+
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, [animateOnView, mode, triggerTapAnimation]);
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") {
+      return;
+    }
+
+    triggerTapAnimation();
+  };
+
+  const handlePointerEnter = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") {
+      setIsActive(true);
+    }
+  };
+
+  const handlePointerLeave = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") {
+      setIsActive(false);
+    }
+  };
+
+  const staticLayerClassName = [
+    "h-full w-full object-contain transition-opacity duration-200",
+    isActive ? "opacity-0" : "opacity-100",
+  ].join(" ");
+  const animatedLayerClassName = [
+    "absolute inset-0 h-full w-full object-contain transition-opacity duration-200",
+    isActive ? "opacity-100" : "opacity-0",
+  ].join(" ");
 
   if (mode !== "static") {
     return (
-      <div className={rootClassName}>
+      <div
+        ref={rootRef}
+        className={rootClassName}
+        onPointerDown={handlePointerDown}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+      >
         <Image
           src="/pets/kittle/kittle-static.webp"
           alt="Kittle mascot"
           width={192}
           height={208}
-          className="h-full w-full object-contain transition-opacity duration-200 group-hover:opacity-0"
+          className={staticLayerClassName}
           priority
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={animatedSources[mode]}
-          alt=""
-          width={192}
-          height={208}
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        />
+        {isActive ? (
+          <img
+            src={animatedSources[mode]}
+            alt=""
+            width={192}
+            height={208}
+            aria-hidden="true"
+            className={animatedLayerClassName}
+          />
+        ) : null}
       </div>
     );
   }
 
   return (
-    <div className={rootClassName}>
+    <div ref={rootRef} className={rootClassName}>
       <Image
         src="/pets/kittle/kittle-static.webp"
         alt="Kittle mascot"
