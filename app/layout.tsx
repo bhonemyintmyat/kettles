@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 
 const siteUrl = "https://kettles.studio";
+const defaultGaMeasurementId = "G-J3TMTM3T56";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -77,7 +78,7 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-J3TMTM3T56";
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? defaultGaMeasurementId;
 
   return (
     <html lang="en" suppressHydrationWarning>
