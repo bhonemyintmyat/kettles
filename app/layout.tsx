@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Script from "next/script";
 import "./globals.css";
 
 const siteUrl = "https://kettles.studio";
@@ -9,38 +8,46 @@ const defaultGaMeasurementId = "G-J3TMTM3T56";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Kettles — Online Presence Studio",
-    template: "%s | Kettles",
+    default: "Aung Khaing Khant — Full-Stack Engineer & Founder of Kettles",
+    template: "%s | Aung Khaing Khant",
   },
   description:
-    "Kettles helps founders and service businesses launch clear websites, create useful content, and build practical online presence systems.",
-  applicationName: "Kettles",
+    "Full-stack engineer and founder of Kettles, building robust digital products, expressive web experiences, and practical business systems from Japan.",
+  applicationName: "Aung Khaing Khant",
   keywords: [
-    "online presence studio",
-    "business website",
-    "social content writing",
-    "short video scripts",
-    "Burmese localization",
-    "AI workflow",
+    "Aung Khaing Khant",
+    "full-stack engineer Japan",
+    "Kettles founder",
+    "React developer",
+    "Java developer",
+    "creative developer",
+    "product engineer",
   ],
-  authors: [{ name: "Kettles" }],
-  creator: "Kettles",
+  authors: [{ name: "Aung Khaing Khant" }],
+  creator: "Aung Khaing Khant",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "Kettles",
-    title: "Kettles — Online Presence Studio",
+    siteName: "Aung Khaing Khant",
+    title: "Aung Khaing Khant — Full-Stack Engineer & Founder of Kettles",
     description:
-      "Websites, content systems, localization, and practical digital tools for founders and growing businesses.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Kettles Online Presence Studio" }],
+      "Product engineering, creative technology, and practical systems — built across borders, now from Japan.",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Aung Khaing Khant, Full-Stack Engineer and Founder of Kettles",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kettles — Online Presence Studio",
+    title: "Aung Khaing Khant — Full-Stack Engineer & Founder of Kettles",
     description:
-      "Websites, content systems, localization, and practical digital tools for founders and growing businesses.",
-    images: ["/opengraph-image"],
+      "Product engineering, creative technology, and practical systems — built across borders, now from Japan.",
+    images: ["/og.png"],
   },
   icons: {
     icon: "/menu/kettles-mark.svg",
@@ -52,25 +59,35 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const organizationJsonLd = {
+const personJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Kettles",
+  "@type": "Person",
+  name: "Aung Khaing Khant",
+  alternateName: "Khaing Khant",
   url: siteUrl,
-  logo: `${siteUrl}/brand/kettles-orange.png`,
+  image: `${siteUrl}/aung-khaing-khant.jpg`,
+  jobTitle: "Full-Stack Engineer",
+  worksFor: {
+    "@type": "Organization",
+    name: "Kettles",
+    url: siteUrl,
+  },
   email: "mailto:khaingkhantjp@gmail.com",
   description:
-    "Kettles is an online presence studio offering websites, content systems, Burmese localization, and practical digital tools.",
+    "Full-stack engineer and founder of Kettles, building digital products, expressive web experiences, and practical business systems.",
   sameAs: [
-    "https://www.linkedin.com/company/kettles/",
+    "https://www.linkedin.com/in/khaing-khant-b5ab67188",
     "https://t.me/normanozbornissick",
   ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "sales",
-    email: "khaingkhantjp@gmail.com",
-    availableLanguage: ["English", "Burmese"],
-  },
+  knowsLanguage: ["English", "Burmese", "Japanese"],
+  knowsAbout: [
+    "Full-stack development",
+    "React",
+    "Next.js",
+    "Java",
+    "Node.js",
+    "Creative technology",
+  ],
 };
 
 export default function RootLayout({
@@ -81,7 +98,7 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? defaultGaMeasurementId;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         {gaId ? (
           <>
@@ -102,10 +119,10 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <Script
-          id="kettles-organization-jsonld"
+        <script
+          id="aung-khaing-khant-jsonld"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </body>
     </html>
