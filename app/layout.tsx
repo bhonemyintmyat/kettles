@@ -82,21 +82,26 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        {children}
+      <head>
         {gaId ? (
           <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
-            <Script id="kettles-google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}', { anonymize_ip: true });
-              `}
-            </Script>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+            <script
+              id="kettles-google-analytics"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}', { anonymize_ip: true });
+                `,
+              }}
+            />
           </>
         ) : null}
+      </head>
+      <body>
+        {children}
         <Script
           id="kettles-organization-jsonld"
           type="application/ld+json"
