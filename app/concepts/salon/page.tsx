@@ -71,6 +71,8 @@ export default function SalonConceptPage() {
         <span>Self-initiated concept by Kettles Studio</span>
         <span className="concept-disclaimer__dot" />
         <span>Fictional salon — not commissioned client work</span>
+        <span className="concept-disclaimer__dot" />
+        <a href="#concept-note">See the design goals</a>
       </div>
 
       <header className="salon-header">
@@ -112,10 +114,10 @@ export default function SalonConceptPage() {
         <div className="salon-hero__wash" />
         <div className="salon-hero__content">
           <p className="salon-eyebrow">English-friendly hair care in Osaka</p>
-          <h1>A quieter kind of<br />hair appointment.</h1>
+          <h1>Beautiful hair.<br />Clear booking.</h1>
           <p className="salon-hero__copy">
-            Thoughtful cuts, natural color and restorative care—explained clearly,
-            booked simply and shaped around you.
+            Choose a service, see starting prices and request a preferred time in
+            simple English—before you arrive.
           </p>
           <div className="salon-hero__actions">
             <button type="button" onClick={scrollToBooking}>
@@ -272,7 +274,7 @@ export default function SalonConceptPage() {
         </div>
       </section>
 
-      <section className="salon-case-study">
+      <section id="concept-note" className="salon-case-study">
         <div className="salon-case-study__tag">Kettles concept note</div>
         <div className="salon-case-study__content">
           <div>
@@ -291,6 +293,15 @@ export default function SalonConceptPage() {
           <span><strong>03</strong>Low-friction booking request</span>
           <span><strong>04</strong>Trust-building first-visit guidance</span>
         </div>
+        <div className="salon-case-study__cta">
+          <div>
+            <small>For independent salon owners</small>
+            <strong>Want this thinking applied to your salon?</strong>
+          </div>
+          <Link href="/founder#contact">
+            Discuss your salon <ArrowRight size={17} />
+          </Link>
+        </div>
       </section>
 
       <footer className="salon-footer">
@@ -301,10 +312,6 @@ export default function SalonConceptPage() {
         <Link href="/founder"><ArrowLeft size={16} /> View the Kettles founder profile</Link>
         <p>Fictional business and example content. Not a commissioned client project.</p>
       </footer>
-
-      <button className="salon-mobile-cta" type="button" onClick={scrollToBooking}>
-        Choose a service <ArrowRight size={16} />
-      </button>
 
       {notice && (
         <div className="salon-toast" role="status">
