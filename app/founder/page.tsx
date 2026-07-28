@@ -96,7 +96,7 @@ export default function Page() {
   return (
     <main>
       <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Aung Khaing Khant, home">
+        <a className="wordmark" href="#top" aria-label="Aung Khaing Khant, known as Norman, home">
           AKK<span>.</span>
         </a>
         <nav aria-label="Primary navigation">
@@ -104,7 +104,7 @@ export default function Page() {
           <a href="#work">Selected work</a>
           <a href="#kettles">Kettles</a>
         </nav>
-        <a className="header-contact" href="mailto:khaingkhantjp@gmail.com">
+        <a className="header-contact" href="mailto:norman@kettles.studio">
           Let’s talk <ArrowUpRight aria-hidden="true" />
         </a>
       </header>
@@ -121,9 +121,9 @@ export default function Page() {
             <em>businesses remember.</em>
           </h1>
           <p className="hero-intro">
-            I’m Aung Khaing Khant — an engineer who moves between robust systems
-            and expressive digital experiences. Born in Myanmar, shaped by
-            cross-border teams, now building from Japan.
+            I’m Aung Khaing Khant (Norman) — an engineer who moves between
+            robust systems and expressive digital experiences. Born in Myanmar,
+            shaped by cross-border teams, now building from Japan.
           </p>
           <div className="hero-actions">
             <a className="button button-dark" href="#work">
@@ -338,7 +338,7 @@ export default function Page() {
               <span>Internal tools & automation</span>
               <span>Content & online presence systems</span>
             </div>
-            <a className="button button-orange" href="mailto:khaingkhantjp@gmail.com">
+            <a className="button button-orange" href="mailto:norman@kettles.studio">
               Start a project <ArrowUpRight aria-hidden="true" />
             </a>
           </div>
@@ -373,8 +373,8 @@ export default function Page() {
           a practical next step.
         </p>
         <div className="contact-actions">
-          <a className="button button-dark" href="mailto:khaingkhantjp@gmail.com">
-            <Mail aria-hidden="true" /> khaingkhantjp@gmail.com
+          <a className="button button-dark" href="mailto:norman@kettles.studio">
+            <Mail aria-hidden="true" /> norman@kettles.studio
           </a>
           <a
             className="button button-outline"
@@ -390,7 +390,7 @@ export default function Page() {
       <footer className="site-footer">
         <div>
           <strong>AKK.</strong>
-          <span>Aung Khaing Khant · Osaka, Japan</span>
+          <span>Aung Khaing Khant (Norman) · Osaka, Japan</span>
         </div>
         <p>Full-stack engineering, creative technology and practical systems.</p>
         <span>© 2026</span>
