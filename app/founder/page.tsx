@@ -88,7 +88,7 @@ const partners = [
   { name: "TrustMark", src: "/partners/trustmark.png" },
   { name: "89 Lounge", src: "/partners/89-lounge-cropped.png" },
   { name: "Japan Style", src: "/partners/japan-style.png" },
-  { name: "High Table", src: "/partners/high-table.jpg" },
+  { name: "420Kings", src: "/partners/420kings.png" },
   { name: "Myo Myanmar", src: "/partners/myo-myanmar.png" },
 ];
 
