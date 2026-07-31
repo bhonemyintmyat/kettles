@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 
 const siteUrl = "https://kettles.studio";
+const defaultGaMeasurementId = "G-J3TMTM3T56";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -77,25 +78,30 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-J3TMTM3T56";
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? defaultGaMeasurementId;
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        {children}
+      <head>
         {gaId ? (
           <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
-            <Script id="kettles-google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}', { anonymize_ip: true });
-              `}
-            </Script>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+            <script
+              id="kettles-google-analytics"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}', { anonymize_ip: true });
+                `,
+              }}
+            />
           </>
         ) : null}
+      </head>
+      <body>
+        {children}
         <Script
           id="kettles-organization-jsonld"
           type="application/ld+json"

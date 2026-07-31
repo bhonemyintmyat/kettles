@@ -323,7 +323,7 @@ const content = {
       { name: "TrustMark", label: "Dried nipa palm and agricultural exporter" },
       { name: "89Lounge", label: "Creative / media brand" },
       { name: "Japan Style", label: "Clothing and lifestyle brand retailer" },
-      { name: "High Table", label: "Cannabis brand" },
+      { name: "420Kings", label: "Cannabis brand" },
       { name: "Myo Myanmar", label: "Real estate and local business presence" },
     ],
     contactLabel: "Start here",
@@ -523,7 +523,7 @@ const content = {
       { name: "TrustMark", label: "Dried nipa palm and agricultural exporter" },
       { name: "89Lounge", label: "Creative / media brand" },
       { name: "Japan Style", label: "Clothing and lifestyle brand retailer" },
-      { name: "High Table", label: "Cannabis brand" },
+      { name: "420Kings", label: "Cannabis brand" },
     ],
     contactLabel: "????? ??????????????",
     contactTitle: "Website, system, tool ????? ????????????",
@@ -758,7 +758,7 @@ const myContent = {
     { name: "TrustMark", label: "Dried nipa palm and agricultural exporter" },
     { name: "89Lounge", label: "Creative / media brand" },
     { name: "Japan Style", label: "Clothing and lifestyle brand retailer" },
-    { name: "High Table", label: "Cannabis brand" },
+    { name: "420Kings", label: "Cannabis brand" },
     { name: "Myo Myanmar", label: "Real estate and local business presence" },
   ],
   contactLabel: "ဒီမှာ စတင်နိုင်ပါတယ်",
@@ -1178,7 +1178,7 @@ const partnerLogoSrcMap: Record<string, string> = {
   TrustMark: "/partners/trustmark.png",
   "89Lounge": "/partners/89-lounge-cropped.png",
   "Japan Style": "/partners/japan-style.png",
-  "High Table": "/partners/high-table.jpg",
+  "420Kings": "/partners/420kings.png",
   "Myo Myanmar": "/partners/myo-myanmar.png",
 };
 
@@ -1693,7 +1693,16 @@ export default function Page() {
           </Reveal>
 
           <footer className="flex flex-col gap-4 py-8 text-xs text-white/38 md:flex-row md:items-center md:justify-between">
-            <span>Kettles Studio</span>
+            <div className="flex items-center gap-3">
+              <span>Kettles Studio</span>
+              <span className="h-1 w-1 rounded-full bg-[#FF5303]" aria-hidden="true" />
+              <a
+                href="/founder"
+                className="text-white/58 underline decoration-white/20 underline-offset-4 transition hover:text-white"
+              >
+                Founder profile
+              </a>
+            </div>
             <div className="flex items-center gap-2">
               <a
                 href="https://t.me/normanozbornissick"
