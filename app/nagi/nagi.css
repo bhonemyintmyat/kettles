@@ -651,6 +651,7 @@
 }
 
 .nagi-booking__services button.is-selected,
+.nagi-booking__channels button.is-selected,
 .nagi-booking__dates button.is-selected,
 .nagi-booking__times button.is-selected {
   border-color: var(--ink);
@@ -658,8 +659,76 @@
   color: white;
 }
 
-.nagi-booking__services button.is-selected small {
+.nagi-booking__services button.is-selected small,
+.nagi-booking__channels button.is-selected small {
   color: rgba(255, 255, 255, 0.62);
+}
+
+.nagi-booking__channels {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.nagi-booking__channels button {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: white;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.nagi-booking__channels span {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.nagi-booking__channels small {
+  max-width: 210px;
+  color: var(--ink-soft);
+  font-size: 8px;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.nagi-booking__handoff {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+}
+
+.nagi-booking__handoff p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 9px;
+  line-height: 1.7;
+}
+
+.nagi-booking__handoff ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nagi-booking__handoff li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-size: 8px;
+  font-weight: 600;
 }
 
 .nagi-booking__dates,

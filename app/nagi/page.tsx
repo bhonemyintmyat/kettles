@@ -58,13 +58,29 @@ const services = [
   },
 ];
 
-const dates = [
-  { short: "SAT", day: "01", label: "Saturday, 1 August" },
-  { short: "SUN", day: "02", label: "Sunday, 2 August" },
-  { short: "TUE", day: "04", label: "Tuesday, 4 August" },
+const bookingChannels = [
+  {
+    id: "line",
+    en: "LINE",
+    ja: "LINE",
+    detailEn: "Continue in the salon's official chat",
+    detailJa: "サロン公式LINEで相談・予約",
+  },
+  {
+    id: "hotpepper",
+    en: "Hot Pepper Beauty",
+    ja: "ホットペッパービューティー",
+    detailEn: "Open the salon's existing reservation page",
+    detailJa: "現在の予約ページへ移動",
+  },
+  {
+    id: "salon-system",
+    en: "Salon app / booking form",
+    ja: "サロンアプリ・予約フォーム",
+    detailEn: "Use the system the salon already manages",
+    detailJa: "現在お使いのシステムで予約",
+  },
 ];
-
-const times = ["10:00", "11:30", "14:00", "16:30"];
 
 const copy = {
   en: {
@@ -211,14 +227,18 @@ export default function NagiPage() {
   const [language, setLanguage] = useState<Language>("en");
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(services[0].id);
-  const [selectedDate, setSelectedDate] = useState(dates[0].label);
-  const [selectedTime, setSelectedTime] = useState(times[1]);
+  const [selectedChannel, setSelectedChannel] = useState(bookingChannels[0].id);
   const [bookingOpen, setBookingOpen] = useState(false);
   const text = copy[language];
 
   const selected = useMemo(
     () => services.find((service) => service.id === selectedService) ?? services[0],
     [selectedService],
+  );
+
+  const selectedBookingChannel = useMemo(
+    () => bookingChannels.find((channel) => channel.id === selectedChannel) ?? bookingChannels[0],
+    [selectedChannel],
   );
 
   function jumpTo(id: string) {
@@ -425,34 +445,41 @@ export default function NagiPage() {
           </div>
 
           <div className="nagi-booking__step">
-            <div className="nagi-booking__label"><span>2</span><strong>{text.chooseDate}</strong></div>
-            <div className="nagi-booking__dates">
-              {dates.map((date) => (
+            <div className="nagi-booking__label">
+              <span>2</span>
+              <strong>{language === "en" ? "Choose how to book" : "予約方法を選ぶ"}</strong>
+            </div>
+            <div className="nagi-booking__channels">
+              {bookingChannels.map((channel) => (
                 <button
-                  key={date.label}
+                  key={channel.id}
                   type="button"
-                  className={selectedDate === date.label ? "is-selected" : ""}
-                  onClick={() => setSelectedDate(date.label)}
+                  className={selectedChannel === channel.id ? "is-selected" : ""}
+                  onClick={() => setSelectedChannel(channel.id)}
                 >
-                  <small>{date.short}</small><strong>{date.day}</strong><span>AUG</span>
+                  <span>{language === "en" ? channel.en : channel.ja}</span>
+                  <small>{language === "en" ? channel.detailEn : channel.detailJa}</small>
                 </button>
               ))}
             </div>
           </div>
 
           <div className="nagi-booking__step">
-            <div className="nagi-booking__label"><span>3</span><strong>{text.chooseTime}</strong></div>
-            <div className="nagi-booking__times">
-              {times.map((time) => (
-                <button
-                  key={time}
-                  type="button"
-                  className={selectedTime === time ? "is-selected" : ""}
-                  onClick={() => setSelectedTime(time)}
-                >
-                  {time}
-                </button>
-              ))}
+            <div className="nagi-booking__label">
+              <span>3</span>
+              <strong>{language === "en" ? "Continue in the salon's system" : "現在の予約システムへ"}</strong>
+            </div>
+            <div className="nagi-booking__handoff">
+              <p>
+                {language === "en"
+                  ? "NAGI keeps one source of truth. This page explains the visit, then hands the guest to the booking tool the salon already uses."
+                  : "予約管理はひとつのまま。このページでサービス内容を分かりやすく案内し、現在お使いの予約ツールへお客様をご案内します。"}
+              </p>
+              <ul>
+                <li><Check size={14} />{language === "en" ? "No second calendar" : "予約カレンダーを増やさない"}</li>
+                <li><Check size={14} />{language === "en" ? "No duplicate management" : "二重管理なし"}</li>
+                <li><Check size={14} />{language === "en" ? "One clear next action" : "次の行動が明確"}</li>
+              </ul>
             </div>
           </div>
 
@@ -460,10 +487,10 @@ export default function NagiPage() {
             <div>
               <small>{text.request}</small>
               <strong>{language === "en" ? selected.en : selected.ja}</strong>
-              <span>{selectedDate} · {selectedTime}</span>
+              <span>{language === "en" ? selectedBookingChannel.en : selectedBookingChannel.ja}</span>
             </div>
             <button type="button" onClick={() => setBookingOpen(true)}>
-              {text.continue} <ArrowRight size={16} />
+              {language === "en" ? "Preview handoff" : "予約画面へ進む"} <ArrowRight size={16} />
             </button>
           </div>
         </div>
@@ -516,11 +543,14 @@ export default function NagiPage() {
             <span className="nagi-modal__icon"><Check size={22} /></span>
             <p className="nagi-kicker">{text.request}</p>
             <h2 id="booking-title">{text.demoTitle}</h2>
-            <p>{text.demoBody}</p>
+            <p>
+              {language === "en"
+                ? `On a live salon site, this button opens ${selectedBookingChannel.en}. This demonstration never collects personal information or creates a reservation.`
+                : `実際のサロンサイトでは、このボタンから${selectedBookingChannel.ja}へ移動します。このデモでは個人情報の収集や予約の作成は行いません。`}
+            </p>
             <dl>
               <div><dt>{text.chooseService}</dt><dd>{language === "en" ? selected.en : selected.ja}</dd></div>
-              <div><dt>{text.chooseDate}</dt><dd>{selectedDate}</dd></div>
-              <div><dt>{text.chooseTime}</dt><dd>{selectedTime}</dd></div>
+              <div><dt>{language === "en" ? "Booking method" : "予約方法"}</dt><dd>{language === "en" ? selectedBookingChannel.en : selectedBookingChannel.ja}</dd></div>
             </dl>
             <button type="button" onClick={() => setBookingOpen(false)}>{text.close}</button>
           </div>
