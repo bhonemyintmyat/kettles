@@ -56,7 +56,8 @@ export default function BookingBridgePage() {
           KETTLES<span>.</span>
         </Link>
         <nav aria-label="Booking Bridge navigation">
-          <a href="#how">How it works</a>
+          <a href="#integration">Integration</a>
+          <a href="#how">Guest journey</a>
           <a href="#scope">Scope</a>
           <a href="#start">Start</a>
         </nav>
@@ -114,6 +115,62 @@ export default function BookingBridgePage() {
         <article><Smartphone /><strong>One mobile entrance</strong><span>One clear place to understand the visit.</span></article>
         <article><Languages /><strong>Japanese + English</strong><span>Simple language and visual reassurance.</span></article>
         <article><Link2 /><strong>Existing system handoff</strong><span>No operational replacement or duplicate calendar.</span></article>
+      </section>
+
+      <section className="bridge-integration" id="integration">
+        <div className="bridge-section-heading">
+          <p className="bridge-kicker">HOW IT JOINS YOUR CURRENT WEBSITE</p>
+          <h2>Add one clear entrance. Keep everything behind it.</h2>
+          <p>
+            Booking Bridge does not replace your salon website or reservation tool. It adds a
+            bilingual path between a curious guest and the system your team already checks.
+          </p>
+        </div>
+
+        <div className="bridge-integration__visual" aria-label="Existing salon website integration flow">
+          <article className="bridge-existing-site">
+            <div className="bridge-window-bar"><i /><i /><i /><span>your-salon.jp</span></div>
+            <div className="bridge-site-nav"><strong>SALON</strong><span>Menu</span><span>Style</span><span>Access</span></div>
+            <div className="bridge-site-hero">
+              <small>YOUR CURRENT WEBSITE</small>
+              <strong>No redesign required.</strong>
+              <p>Your photos, pages, domain and Japanese customer journey remain in place.</p>
+              <button>English booking / 海外のお客様 <ArrowRight size={13} /></button>
+            </div>
+            <span className="bridge-change-label">Only this button is added</span>
+          </article>
+
+          <div className="bridge-flow-arrow" aria-hidden="true"><ArrowRight /></div>
+
+          <article className="bridge-bridge-preview">
+            <div className="bridge-preview-top"><span>BOOKING BRIDGE</span><small>EN / JP</small></div>
+            <strong>Everything a first-time guest needs.</strong>
+            <ul>
+              <li><Check size={12} /> Services and starting prices</li>
+              <li><Check size={12} /> First-visit guidance</li>
+              <li><Check size={12} /> Language and access notes</li>
+            </ul>
+            <div className="bridge-preview-actions">
+              <span>Continue with LINE</span>
+              <span>Continue with Hot Pepper</span>
+              <span>Continue with salon form</span>
+            </div>
+          </article>
+        </div>
+
+        <div className="bridge-integration__options">
+          <article><span>01</span><strong>Website button</strong><p>Add one button in the header, booking area or footer of the existing site.</p></article>
+          <article><span>02</span><strong>Instagram + Google link</strong><p>Use the same Booking Bridge URL in social profiles and Google Business Profile.</p></article>
+          <article><span>03</span><strong>Existing booking handoff</strong><p>Guests finish in LINE, Hot Pepper, your salon app or your current inquiry form.</p></article>
+        </div>
+
+        <div className="bridge-keeps">
+          <span>Your website stays</span>
+          <span>Your domain stays</span>
+          <span>Your calendar stays</span>
+          <span>Your customer data stays</span>
+          <strong>No duplicate reservation management.</strong>
+        </div>
       </section>
 
       <section className="bridge-journey" id="how">

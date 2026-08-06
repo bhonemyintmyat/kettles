@@ -121,7 +121,7 @@ const copy = {
     bookingEyebrow: "04 · Request a visit",
     bookingTitle: "Begin with three\nsimple choices.",
     bookingBody:
-      "Select a service, preferred date and time. We confirm the final appointment personally.",
+      "Choose a starting service and the booking channel you already trust. The salon confirms the final appointment in its existing system.",
     chooseService: "Choose a service",
     chooseDate: "Preferred date",
     chooseTime: "Preferred time",
