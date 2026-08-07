@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -14,13 +17,12 @@ import {
 import "./booking-bridge.css";
 
 const included = [
-  "Mobile-first bilingual booking entrance",
-  "Japanese and English content structure",
-  "Up to six services with starting prices",
-  "First-visit guidance and useful FAQs",
-  "Hours, access and contact information",
-  "Links to LINE, Hot Pepper, an app or form",
-  "One revision and launch support",
+  "Floating “Book in English” button for your existing website",
+  "Bilingual booking panel with up to six services",
+  "Preferred date and time request step",
+  "Handoff to LINE, Hot Pepper, your app or current form",
+  "First-visit notes, hours, access and useful FAQs",
+  "Installation guidance, one revision and launch support",
 ];
 
 const excluded = [
@@ -43,6 +45,31 @@ const inputs = [
 ];
 
 export default function BookingBridgePage() {
+  useEffect(() => {
+    const revealItems = document.querySelectorAll<HTMLElement>(
+      ".bridge > section, .bridge .bridge-section-heading, .bridge .bridge-integration__visual, .bridge .bridge-integration__options > article, .bridge .bridge-screen-grid > article, .bridge .bridge-scope__lists > article, .bridge .bridge-process li, .bridge .bridge-inputs > *, .bridge .bridge-commercial > *",
+    );
+
+    revealItems.forEach((item, index) => {
+      item.dataset.reveal = "";
+      item.style.setProperty("--reveal-delay", `${(index % 4) * 70}ms`);
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+    );
+
+    revealItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <main className="bridge">
       <div className="bridge-note">
@@ -68,17 +95,18 @@ export default function BookingBridgePage() {
 
       <section className="bridge-hero">
         <div className="bridge-hero__copy">
-          <p className="bridge-kicker">Booking Bridge · Bilingual salon entrance</p>
+          <p className="bridge-kicker">Booking Bridge Kit · Floating bilingual booking guide</p>
           <h1>
-            Your booking system stays.
-            <em>The path becomes clear.</em>
+            Keep your website.
+            <em>Add one clearer way to book.</em>
           </h1>
           <p className="bridge-hero__jp">
-            予約システムはそのまま。海外のお客様に、もっと分かりやすく。
+            サイトはそのまま。英語予約への分かりやすい入口だけを追加します。
           </p>
           <p className="bridge-hero__intro">
-            A focused Japanese–English page that explains the visit and guides each guest into the
-            LINE, Hot Pepper, app or form your salon already manages.
+            This is an installable booking kit—not a website redesign or a new reservation system.
+            One floating button opens a bilingual service and preferred-time guide, then sends the
+            guest into the LINE, Hot Pepper, app or form your salon already manages.
           </p>
           <div className="bridge-actions">
             <Link href="/nagi" className="bridge-button bridge-button--dark">
@@ -87,8 +115,8 @@ export default function BookingBridgePage() {
             <a href="#scope" className="bridge-text-link">See the fixed scope</a>
           </div>
           <div className="bridge-hero__facts">
-            <span><strong>¥45,000</strong>Fixed project scope</span>
-            <span><strong>7–10 days</strong>After materials arrive</span>
+            <span><strong>¥45,000</strong>Fixed-price kit</span>
+            <span><strong>7–10 days</strong>Installation-ready delivery</span>
             <span><strong>50 / 50</strong>Start and launch</span>
           </div>
         </div>
@@ -112,15 +140,15 @@ export default function BookingBridgePage() {
       </section>
 
       <section className="bridge-principles" aria-label="Booking Bridge principles">
-        <article><Smartphone /><strong>One mobile entrance</strong><span>One clear place to understand the visit.</span></article>
-        <article><Languages /><strong>Japanese + English</strong><span>Simple language and visual reassurance.</span></article>
-        <article><Link2 /><strong>Existing system handoff</strong><span>No operational replacement or duplicate calendar.</span></article>
+        <article><Smartphone /><strong>One floating button</strong><span>Added to the website you already have.</span></article>
+        <article><Languages /><strong>One guided booking panel</strong><span>Services, visit details and preferred time in Japanese + English.</span></article>
+        <article><Link2 /><strong>One existing-system handoff</strong><span>LINE, Hot Pepper, app or form—no duplicate calendar.</span></article>
       </section>
 
       <section className="bridge-integration" id="integration">
         <div className="bridge-section-heading">
           <p className="bridge-kicker">HOW IT JOINS YOUR CURRENT WEBSITE</p>
-          <h2>Add one clear entrance. Keep everything behind it.</h2>
+          <h2>This is the kit: one button, one guide, one handoff.</h2>
           <p>
             Booking Bridge does not replace your salon website or reservation tool. It adds a
             bilingual path between a curious guest and the system your team already checks.
@@ -135,7 +163,7 @@ export default function BookingBridgePage() {
               <small>YOUR CURRENT WEBSITE</small>
               <strong>No redesign required.</strong>
               <p>Your photos, pages, domain and Japanese customer journey remain in place.</p>
-              <button>English booking / 海外のお客様 <ArrowRight size={13} /></button>
+              <button>Book in English <ArrowRight size={13} /></button>
             </div>
             <span className="bridge-change-label">Only this button is added</span>
           </article>
@@ -212,10 +240,10 @@ export default function BookingBridgePage() {
       <section className="bridge-scope" id="scope">
         <div className="bridge-scope__intro">
           <p className="bridge-kicker">FIXED SCOPE · 明確な制作範囲</p>
-          <h2>Small enough to say yes. Complete enough to use.</h2>
+          <h2>A focused installable kit—not a website project.</h2>
           <p>
-            This is a focused booking entrance—not a full website replacement. The boundary keeps the
-            price, timing and responsibility understandable for both sides.
+            You are buying the Booking Bridge Kit. Your existing website, branding, booking system,
+            calendar and customer data remain in place.
           </p>
         </div>
         <div className="bridge-scope__lists">
@@ -260,7 +288,7 @@ export default function BookingBridgePage() {
           <small>Any applicable tax is confirmed before work begins.</small>
         </div>
         <div className="bridge-commercial__copy">
-          <h2>A practical first improvement—not a risky rebuild.</h2>
+          <h2>Buy the Booking Bridge Kit—not a website redesign.</h2>
           <ul>
             <li><Clock3 size={15} />7–10 working days after all materials arrive</li>
             <li><ShieldCheck size={15} />50% to begin · 50% before public launch</li>
@@ -270,7 +298,7 @@ export default function BookingBridgePage() {
             className="bridge-button bridge-button--orange"
             href="mailto:norman@kettles.studio?subject=Booking%20Bridge%20discussion"
           >
-            <Mail size={16} /> Discuss your booking path
+            <Mail size={16} /> Discuss the Booking Bridge Kit
           </a>
           <p className="bridge-commercial__jp">現在の予約方法を確認し、最初に改善できる導線をご提案します。</p>
         </div>
