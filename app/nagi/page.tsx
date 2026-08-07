@@ -115,6 +115,11 @@ const copy = {
     viewMenu: "View menu",
     openGuide: "Try the booking guide",
     highlights: ["Simple English support", "Price confirmed first", "4 min from Nakazakicho"],
+    address: "Nakazaki, Kita-ku, Osaka",
+    directions: "4 min from Nakazakicho Station",
+    hours: "Tue–Sun · 10:00–19:00",
+    closed: "Monday closed",
+    nextOpening: "Tue · 11:30",
     menuKicker: "SERVICE CATALOG",
     menuTitle: "Choose what feels right.",
     menuCopy: "Starting prices are shown clearly. Your stylist confirms the final service, time and price before beginning.",
@@ -149,6 +154,11 @@ const copy = {
     viewMenu: "メニューを見る",
     openGuide: "予約ガイドを試す",
     highlights: ["簡単な英語対応", "施術前に料金確認", "中崎町駅から4分"],
+    address: "大阪市北区中崎",
+    directions: "中崎町駅から徒歩4分",
+    hours: "火〜日 · 10:00〜19:00",
+    closed: "月曜定休",
+    nextOpening: "火曜日 · 11:30",
     menuKicker: "サービスカタログ",
     menuTitle: "今の気分に合うメニューを。",
     menuCopy: "開始価格を分かりやすく表示。施術前に内容・時間・最終料金をご確認いただきます。",
@@ -268,7 +278,7 @@ export default function NagiPage() {
           />
           <div className="nagi-hero__availability">
             <span><i /> {language === "en" ? "Next opening" : "次の空き"}</span>
-            <strong>{language === "en" ? "Tue · 11:30" : "火曜日・11:30"}</strong>
+            <strong>{text.nextOpening}</strong>
             <button type="button" onClick={() => openBooking()}>{text.book}<ArrowRight size={13} /></button>
           </div>
         </div>
@@ -308,8 +318,8 @@ export default function NagiPage() {
       <section id="visit" className="nagi-visit">
         <div><p className="nagi-kicker">VISIT NAGI</p><h2>{text.visitTitle}</h2></div>
         <div className="nagi-visit__details">
-          <span><MapPin size={17} /><b>Nakazaki, Kita-ku, Osaka</b><small>4 min from Nakazakicho Station</small></span>
-          <span><Clock3 size={17} /><b>Tue–Sun · 10:00–19:00</b><small>Monday closed</small></span>
+          <span><MapPin size={17} /><b>{text.address}</b><small>{text.directions}</small></span>
+          <span><Clock3 size={17} /><b>{text.hours}</b><small>{text.closed}</small></span>
           <button type="button" onClick={() => openBooking()}>{text.book}<ArrowRight size={15} /></button>
         </div>
       </section>
