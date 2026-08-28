@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -43,6 +44,25 @@ const inputs = [
   "First-visit and cancellation notes",
   "Japanese text approval contact",
 ];
+
+function BookingBridgeCampaignVisual({ mobile = false }: { mobile?: boolean }) {
+  return (
+    <figure className={mobile ? "bridge-campaign-visual bridge-campaign-visual--mobile" : "bridge-campaign-visual"}>
+      <Image
+        src="/concepts/booking-bridge-campaign-v1.png"
+        alt="Two mobile screens showing a bilingual salon service menu and a choice of existing booking methods"
+        fill
+        priority
+        sizes={mobile ? "(max-width: 560px) 100vw, 0px" : "(max-width: 900px) 0px, 42vw"}
+      />
+      <figcaption>
+        <span>THE PRODUCT, AT A GLANCE</span>
+        <strong>Menu clarity → first-visit confidence → your existing booking channel</strong>
+        <small>Concept presentation · final design uses the salon&apos;s approved brand and content</small>
+      </figcaption>
+    </figure>
+  );
+}
 
 export default function BookingBridgePage() {
   useEffect(() => {
@@ -103,16 +123,16 @@ export default function BookingBridgePage() {
           <p className="bridge-hero__jp">
             サイトはそのまま。英語予約への分かりやすい入口だけを追加します。
           </p>
+          <BookingBridgeCampaignVisual mobile />
           <p className="bridge-hero__intro">
-            This is an installable booking kit—not a website redesign or a new reservation system.
-            One floating button opens a bilingual service and preferred-time guide, then sends the
-            guest into the LINE, Hot Pepper, app or form your salon already manages.
+            A mobile-first bilingual guide that makes services, first-visit details and the next
+            booking step clear—without replacing the website or reservation system your team already uses.
           </p>
           <div className="bridge-actions">
             <Link href="/nagi" className="bridge-button bridge-button--dark">
-              Experience the demo <ArrowRight size={16} />
+              View the 30-second demo <ArrowRight size={16} />
             </Link>
-            <a href="#scope" className="bridge-text-link">See the fixed scope</a>
+            <a href="#scope" className="bridge-text-link">What ¥45,000 includes</a>
           </div>
           <div className="bridge-hero__facts">
             <span><strong>¥45,000</strong>Fixed-price kit</span>
@@ -122,20 +142,7 @@ export default function BookingBridgePage() {
         </div>
 
         <div className="bridge-hero__visual" aria-label="Booking Bridge mobile journey preview">
-          <div className="bridge-phone bridge-phone--back">
-            <div className="bridge-phone__bar"><span>NAGI</span><small>EN / JP</small></div>
-            <p>First visit</p>
-            <strong>Clear before you arrive.</strong>
-            <div className="bridge-mini-list"><i /><i /><i /></div>
-          </div>
-          <div className="bridge-phone bridge-phone--front">
-            <div className="bridge-phone__bar"><span>NAGI</span><small>EN / JP</small></div>
-            <p>Choose how to book</p>
-            <button>LINE <ArrowRight size={13} /></button>
-            <button>Hot Pepper Beauty <ArrowRight size={13} /></button>
-            <button>Salon app / form <ArrowRight size={13} /></button>
-            <small className="bridge-phone__note">No second calendar. No duplicate management.</small>
-          </div>
+          <BookingBridgeCampaignVisual />
         </div>
       </section>
 

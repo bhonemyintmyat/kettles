@@ -94,8 +94,38 @@ html:has(.bridge) { scroll-behavior: smooth; }
 .bridge-hero__facts span { display: flex; flex-direction: column; gap: 5px; padding: 17px 15px 0 0; color: var(--soft); font-size: 8px; }
 .bridge-hero__facts strong { color: var(--ink); font-size: 12px; }
 
-.bridge-hero__visual { position: relative; min-height: 520px; }
+.bridge-hero__visual { position: relative; min-height: 620px; }
 .bridge-hero__visual::before { content: ""; position: absolute; inset: 5% -20% 0 4%; border-radius: 50%; background: var(--sage); }
+.bridge-campaign-visual {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(23,51,47,.14);
+  border-radius: 34px;
+  background: #e9dfd1;
+  box-shadow: 0 34px 90px rgba(23,51,47,.2);
+  transform: rotate(1.5deg);
+}
+.bridge-campaign-visual img { object-fit: cover; }
+.bridge-campaign-visual figcaption {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  display: grid;
+  gap: 6px;
+  padding: 16px 17px;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 18px;
+  background: rgba(23,51,47,.91);
+  color: white;
+  backdrop-filter: blur(12px);
+}
+.bridge-campaign-visual figcaption span { color: rgba(255,255,255,.56); font-size: 7px; font-weight: 700; letter-spacing: .14em; }
+.bridge-campaign-visual figcaption strong { max-width: 430px; font-family: "Newsreader",serif; font-size: 20px; font-weight: 400; line-height: 1.1; }
+.bridge-campaign-visual figcaption small { color: rgba(255,255,255,.58); font-size: 7px; line-height: 1.45; }
+.bridge-campaign-visual--mobile { display: none; }
 .bridge-phone { position: absolute; width: min(275px,65%); min-height: 490px; padding: 18px; border: 8px solid var(--ink); border-radius: 34px; background: var(--ivory); box-shadow: 0 30px 80px rgba(23,51,47,.2); }
 .bridge-phone--front { right: 4%; bottom: 0; transform: rotate(2deg); }
 .bridge-phone--back { top: 0; left: 0; transform: rotate(-7deg) scale(.9); opacity: .72; }
@@ -231,12 +261,25 @@ html:has(.bridge) { scroll-behavior: smooth; }
   .bridge-note span + span::before { margin-right: 8px; }
   .bridge-header { min-height: 68px; }
   .bridge-demo-link { font-size: 8px; }
-  .bridge-hero { min-height: auto; padding-top: 72px; }
-  .bridge-hero h1 { font-size: 55px; }
+  .bridge-hero { min-height: auto; padding-top: 58px; }
+  .bridge-hero h1 { font-size: 51px; }
+  .bridge-hero__jp { margin-top: 20px; }
+  .bridge-campaign-visual--mobile {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: calc(100% + 12px);
+    aspect-ratio: 4 / 5;
+    margin: 28px -6px 0;
+    transform: none;
+  }
+  .bridge-campaign-visual figcaption { right: 12px; bottom: 12px; left: 12px; padding: 13px 14px; }
+  .bridge-campaign-visual figcaption strong { font-size: 16px; }
+  .bridge-hero__intro { margin-top: 25px; }
   .bridge-actions { align-items: flex-start; flex-direction: column; }
   .bridge-hero__facts { grid-template-columns: 1fr; }
   .bridge-hero__facts span { padding: 14px 0; border-bottom: 1px solid var(--line); }
-  .bridge-hero__visual { min-height: 450px; }
+  .bridge-hero__visual { display: none; }
   .bridge-phone { width: 72%; min-height: 410px; }
   .bridge-site-nav span { display: none; }
   .bridge-site-hero { min-height: 330px; padding: 48px 24px 88px; }
