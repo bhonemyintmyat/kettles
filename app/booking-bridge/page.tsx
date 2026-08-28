@@ -93,9 +93,9 @@ export default function BookingBridgePage() {
   return (
     <main className="bridge">
       <div className="bridge-note">
-        <span>CLIENT RESPONSE MATERIAL</span>
-        <span>ご検討用資料</span>
-        <span>Unlisted · Kettles Studio</span>
+        <span>FOR INDEPENDENT SALONS</span>
+        <span>日本のサロン向け</span>
+        <span>Booking Bridge · Kettles Studio</span>
       </div>
 
       <header className="bridge-header">
