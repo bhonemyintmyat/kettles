@@ -10,6 +10,20 @@ tmp/
 # environment variables (secrets)
 .env
 .env.local
+.env.*
+!.env.example
 
 # local logo and asset source files
 LogoandAssets/
+
+# Local deployment packages (regenerate from the source when needed)
+/.sites/
+
+# Local sales research tooling and generated workbooks/previews
+/.codex_spreadsheet_osaka_salons/
+/outputs/
+
+# Outreach drafts and exported sales collateral, not website assets
+/output/marketing/outreach-*/
+/output/marketing/booking-bridge-campaign-email.jpg
+/output/pdf/

@@ -2,30 +2,30 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "NAGI Hair Atelier — Osaka",
+  title: "NAGI Booking Bridge — Interactive Salon Demo",
   description:
-    "An English-friendly Osaka hair atelier for thoughtful cuts, soft color and unhurried care.",
+    "Try a floating bilingual booking guide that connects an existing salon website to its current LINE, Hot Pepper or booking form.",
   alternates: { canonical: "/nagi" },
   openGraph: {
-    title: "NAGI Hair Atelier — Osaka",
+    title: "NAGI Booking Bridge — Interactive Salon Demo",
     description:
-      "Thoughtful cuts, soft color and quiet care—explained clearly before we begin.",
+      "Existing website. Clear booking path. Try the floating bilingual booking guide.",
     url: "/nagi",
     type: "website",
     images: [
       {
-        url: "/concepts/nagi-salon-og-v2.png",
-        width: 1200,
-        height: 630,
-        alt: "NAGI Hair Atelier in Osaka",
+        url: "/concepts/nagi-booking-bridge-og.png",
+        width: 2048,
+        height: 1152,
+        alt: "NAGI Booking Bridge floating bilingual salon booking widget",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NAGI Hair Atelier — Osaka",
-    description: "Hair that feels like you.",
-    images: ["/concepts/nagi-salon-og-v2.png"],
+    title: "NAGI Booking Bridge — Interactive Salon Demo",
+    description: "Existing website. Clear booking path.",
+    images: ["/concepts/nagi-booking-bridge-og.png"],
   },
   robots: { index: true, follow: true },
 };
