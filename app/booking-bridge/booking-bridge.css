@@ -297,6 +297,54 @@ html:has(.bridge) { scroll-behavior: smooth; }
   .bridge-footer > div:last-child { align-items: flex-start; flex-direction: column; gap: 10px; }
 }
 
+/* Japanese glyphs need a calmer scale and more leading than Latin display type. */
+.bridge[lang="ja"] {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  line-break: strict;
+  overflow-wrap: anywhere;
+}
+.bridge[lang="ja"] :is(h1, h2, h3, .bridge-site-hero > strong, .bridge-bridge-preview > strong, .bridge-campaign-visual figcaption strong, .bridge-process li strong) {
+  font-family: inherit;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: .01em;
+  word-break: normal;
+}
+.bridge[lang="ja"] .bridge-hero h1 {
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  line-height: 1.5;
+  margin-top: 22px;
+}
+.bridge[lang="ja"] .bridge-hero h1 em { margin-top: .18em; font-style: normal; font-weight: 500; }
+.bridge[lang="ja"] :is(.bridge-section-heading h2, .bridge-scope h2, .bridge-inputs h2, .bridge-commercial h2) {
+  font-size: clamp(1.6rem, 2.7vw, 2.65rem);
+  line-height: 1.55;
+}
+.bridge[lang="ja"] .bridge-section-heading { gap: 20px 32px; align-items: start; }
+.bridge[lang="ja"] :is(.bridge-scope__intro, .bridge-inputs > div) > .bridge-kicker { margin-bottom: 20px; }
+.bridge[lang="ja"] :is(.bridge-note, .bridge-kicker, .bridge-preview-top, .bridge-campaign-visual figcaption span) { letter-spacing: .035em; line-height: 1.8; }
+.bridge[lang="ja"] .bridge-note { flex-wrap: wrap; padding-block: 12px; row-gap: 4px; }
+.bridge[lang="ja"] .bridge-kicker { font-size: .75rem; }
+.bridge[lang="ja"] .bridge-hero__jp { line-height: 1.8; margin-top: 24px; }
+.bridge[lang="ja"] .bridge-hero__facts { margin-top: 36px; }
+.bridge[lang="ja"] .bridge-hero__facts span { padding-block: 18px; line-height: 1.7; }
+.bridge[lang="ja"] .bridge-campaign-visual figcaption { gap: 10px; padding: 20px; }
+.bridge[lang="ja"] .bridge-campaign-visual figcaption strong { font-size: clamp(1rem, 1.3vw, 1.25rem); line-height: 1.65; }
+.bridge[lang="ja"] .bridge-campaign-visual figcaption small { line-height: 1.8; }
+.bridge[lang="ja"] .bridge-site-hero > strong { font-size: clamp(1.5rem, 2.3vw, 2.2rem); line-height: 1.55; }
+.bridge[lang="ja"] .bridge-bridge-preview > strong { font-size: 1.5rem; line-height: 1.6; margin-top: 24px; }
+.bridge[lang="ja"] :is(.bridge-screen-grid h3, .bridge-process li strong) { font-size: 1.25rem; line-height: 1.65; }
+.bridge[lang="ja"] .bridge-commercial__copy li { line-height: 1.8; align-items: flex-start; }
+.bridge[lang="ja"] .bridge-commercial__jp { line-height: 1.8; }
+.bridge[lang="ja"] .bridge-language-switch { white-space: nowrap; flex-shrink: 0; }
+@media (max-width: 560px) {
+  .bridge[lang="ja"] .bridge-hero { padding-top: 40px; padding-bottom: 56px; gap: 32px; }
+  .bridge[lang="ja"] .bridge-hero h1 { font-size: clamp(1.75rem, 7.5vw, 2.25rem); line-height: 1.55; }
+  .bridge[lang="ja"] :is(.bridge-integration, .bridge-journey, .bridge-process, .bridge-scope, .bridge-inputs) { padding-block: 64px; }
+  .bridge[lang="ja"] :is(.bridge-integration__visual, .bridge-screen-grid, .bridge-process ol) { margin-top: 36px; }
+  .bridge[lang="ja"] .bridge-commercial__copy { padding: 48px 22px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bridge *, .bridge *::before, .bridge *::after { scroll-behavior: auto !important; transition: none !important; }
   .bridge [data-reveal] { opacity: 1 !important; transform: none !important; }
