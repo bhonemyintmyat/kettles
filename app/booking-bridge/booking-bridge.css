@@ -68,6 +68,9 @@ html:has(.bridge) { scroll-behavior: smooth; }
 .bridge-header nav { display: flex; gap: 28px; }
 .bridge-header nav a, .bridge-demo-link { font-size: 10px; font-weight: 600; text-decoration: none; }
 .bridge-demo-link { display: inline-flex; align-items: center; gap: 7px; }
+.bridge-header__actions { display: inline-flex; align-items: center; gap: 18px; }
+.bridge-language-switch { display: inline-flex; min-height: 34px; align-items: center; gap: 7px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; font: inherit; font-size: 10px; font-weight: 700; }
+.bridge-language-switch:hover, .bridge-language-switch:focus-visible { background: var(--ink); color: white; outline: none; }
 
 .bridge-hero {
   display: grid;
@@ -261,6 +264,8 @@ html:has(.bridge) { scroll-behavior: smooth; }
   .bridge-note span + span::before { margin-right: 8px; }
   .bridge-header { min-height: 68px; }
   .bridge-demo-link { font-size: 8px; }
+  .bridge-header__actions { gap: 8px; }
+  .bridge-language-switch { min-height: 32px; padding: 0 9px; font-size: 9px; }
   .bridge-hero { min-height: auto; padding-top: 58px; }
   .bridge-hero h1 { font-size: 51px; }
   .bridge-hero__jp { margin-top: 20px; }
